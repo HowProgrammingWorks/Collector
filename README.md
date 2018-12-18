@@ -1,2 +1,1 @@
-# Collector
-Data Collectors for Asynchronous Programming
+# Data Collectors for Asynchronous Programming
