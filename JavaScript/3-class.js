@@ -79,7 +79,7 @@ class Collector {
   }
 }
 
-const collect = expected => new Collector(expected);
+const collect = (expected) => new Collector(expected);
 
 // Collect
 
