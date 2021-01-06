@@ -18,7 +18,7 @@ const KeyCollector = function(keys, timeout, callback) {
 KeyCollector.prototype.collect = function(key, data) {
   if (this.finished) return;
   if (this.keys.includes(key)) {
-    if (this.data.hasOwnProperty(key)) return;
+    if (Object.prototype.hasOwnProperty.call(this.data, key)) return;
     this.count++;
     if (data instanceof Error) {
       this.finished = true;
