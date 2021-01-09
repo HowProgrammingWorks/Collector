@@ -65,7 +65,7 @@ class Collector {
     return this;
   }
 
-  finalize(key, err, data) {
+  finalize(err, data) {
     if (this.finished) return this;
     if (this.doneCallback) {
       if (this.timer) {
@@ -73,7 +73,7 @@ class Collector {
         this.timer = null;
       }
       this.finished = true;
-      this.doneCallback(key, err, data);
+      this.doneCallback(err, data);
     }
     return this;
   }
