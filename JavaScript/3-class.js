@@ -91,7 +91,7 @@ const collector = collect(3)
 
 const sourceForKey3 = (arg1, arg2, callback) => {
   console.dir({ arg1, arg2 });
-  callback(null, 'key3');
+  callback(null, 3);
 };
 
 collector.collect('key1', null, 1);
