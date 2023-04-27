@@ -3,7 +3,7 @@
 const DataCollector = function(expected, timeout, callback) {
   this.expected = expected;
   this.count = 0;
-  this.data = {};
+  this.data = expected > 3 ? new Map() : {};
   this.finished = false;
   this.doneCallback = callback;
   this.timer = setTimeout(() => {
@@ -22,7 +22,11 @@ DataCollector.prototype.collect = function(key, data) {
     this.doneCallback(data);
     return;
   }
-  this.data[key] = data;
+  if (this.data instanceof Map) {
+    this.data.set(key, data);
+  } else {
+    this.data[key] = data;
+  }
   if (this.expected === this.count) {
     if (this.timer) clearTimeout(this.timer);
     this.finished = true;
