@@ -11,6 +11,7 @@ const DataCollector = function(expected, timeout, callback) {
     const err = new Error('Collector timed out');
     this.finished = true;
     this.doneCallback(err);
+    this.timer = null;
   }, timeout);
 };
 
@@ -28,7 +29,10 @@ DataCollector.prototype.collect = function(key, data) {
     this.data[key] = data;
   }
   if (this.expected === this.count) {
-    if (this.timer) clearTimeout(this.timer);
+    if (this.timer) {
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
     this.finished = true;
     this.doneCallback(null, this.data);
   }
