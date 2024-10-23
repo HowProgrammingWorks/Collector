@@ -1,5 +1,7 @@
 'use strict';
 
+const EMPTY_CALLBACK = () => {};
+
 class Collector {
   constructor(expected) {
     // number or array of string, count or keys
@@ -8,7 +10,7 @@ class Collector {
     this.keys = new Set();
     this.count = 0;
     this.timer = null;
-    this.doneCallback = () => {};
+    this.doneCallback = EMPTY_CALLBACK;
     this.finished = false;
     this.data = {};
   }
@@ -61,18 +63,14 @@ class Collector {
     return this;
   }
 
-  done(callback) {
+  done(callback = EMPTY_CALLBACK) {
     this.doneCallback = callback;
     return this;
   }
 
   finalize(err, data) {
-    if (this.finished) return this;
-    if (this.doneCallback) {
-      if (this.timer) {
-        clearTimeout(this.timer);
-        this.timer = null;
-      }
+    if (!this.finished) {
+      if (this.timer) clearTimeout(this.timer);
       this.finished = true;
       this.doneCallback(err, data);
     }
@@ -82,7 +80,7 @@ class Collector {
 
 const collect = (expected) => new Collector(expected);
 
-// Collect
+// Usage
 
 const collector = collect(3)
   .timeout(1000)

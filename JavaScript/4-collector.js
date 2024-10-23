@@ -1,25 +1,25 @@
 'use strict';
 
-class Collector {
-  done = false;
-  data = {};
-  keys = [];
-  count = 0;
+class KeyCollector {
+  #done = false;
+  #data = {};
+  #keys = [];
+  #count = 0;
   #resolve = null;
 
   constructor(keys) {
-    this.keys = keys;
+    this.#keys = keys;
   }
 
   set(key, value) {
-    if (this.done) return;
-    const expected = this.keys.includes(key);
-    const has = this.data[key] !== undefined;
-    if (!has && expected) this.count++;
-    this.data[key] = value;
-    if (this.count === this.keys.length) {
-      this.done = true;
-      if (this.#resolve) this.#resolve(this.data);
+    if (this.#done) return;
+    const expected = this.#keys.includes(key);
+    const has = this.#data[key] !== undefined;
+    if (!has && expected) this.#count++;
+    this.#data[key] = value;
+    if (this.#count === this.#keys.length) {
+      this.#done = true;
+      if (this.#resolve) this.#resolve(this.#data);
     }
   }
 
@@ -30,8 +30,8 @@ class Collector {
 
 // Usage
 
-(async () => {
-  const ac = new Collector(['fileName', 'userName']);
+const main = async () => {
+  const ac = new KeyCollector(['fileName', 'userName']);
 
   setTimeout(() => {
     ac.set('fileName', 'marcus.txt');
@@ -43,4 +43,6 @@ class Collector {
 
   const result = await ac;
   console.log(result);
-})();
+};
+
+main();
