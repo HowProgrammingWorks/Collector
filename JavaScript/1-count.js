@@ -1,6 +1,6 @@
 'use strict';
 
-const DataCollector = function(expected, timeout, callback) {
+const DataCollector = function (expected, timeout, callback) {
   this.expected = expected;
   this.count = 0;
   this.data = {};
@@ -14,7 +14,7 @@ const DataCollector = function(expected, timeout, callback) {
   }, timeout);
 };
 
-DataCollector.prototype.collect = function(key, data) {
+DataCollector.prototype.collect = function (key, data) {
   if (this.finished) return;
   this.count++;
   if (data instanceof Error) {

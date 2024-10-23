@@ -1,7 +1,8 @@
 'use strict';
 
 class Collector {
-  constructor(expected) { // number or array of string, count or keys
+  constructor(expected) {
+    // number or array of string, count or keys
     this.expectKeys = Array.isArray(expected) ? new Set(expected) : null;
     this.expected = this.expectKeys ? expected.length : expected;
     this.keys = new Set();

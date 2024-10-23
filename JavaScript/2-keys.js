@@ -1,6 +1,6 @@
 'use strict';
 
-const KeyCollector = function(keys, timeout, callback) {
+const KeyCollector = function (keys, timeout, callback) {
   this.expected = keys.length;
   this.count = 0;
   this.keys = keys;
@@ -15,7 +15,7 @@ const KeyCollector = function(keys, timeout, callback) {
   }, timeout);
 };
 
-KeyCollector.prototype.collect = function(key, data) {
+KeyCollector.prototype.collect = function (key, data) {
   if (this.finished) return;
   if (this.keys.includes(key)) {
     if (Object.prototype.hasOwnProperty.call(this.data, key)) return;
