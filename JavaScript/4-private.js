@@ -1,7 +1,7 @@
 'use strict';
 
 class KeyCollector {
-  #done = false;
+  #finished = false;
   #data = {};
   #keys = [];
   #count = 0;
@@ -12,13 +12,13 @@ class KeyCollector {
   }
 
   set(key, value) {
-    if (this.#done) return;
+    if (this.#finished) return;
     const expected = this.#keys.includes(key);
     const has = this.#data[key] !== undefined;
     if (!has && expected) this.#count++;
     this.#data[key] = value;
     if (this.#count === this.#keys.length) {
-      this.#done = true;
+      this.#finished = true;
       if (this.#resolve) this.#resolve(this.#data);
     }
   }

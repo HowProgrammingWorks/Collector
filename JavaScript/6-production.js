@@ -9,6 +9,7 @@ class Collector {
   reassign = true;
   timeout = 0;
   defaults = {};
+  validate = null;
   #fulfill = null;
   #reject = null;
   #cause = null;
@@ -18,7 +19,8 @@ class Collector {
 
   constructor(keys, options = {}) {
     const { exact = true, reassign = false } = options;
-    const { timeout = 0, defaults = {} } = options;
+    const { timeout = 0, defaults = {}, validate } = options;
+    if (validate) this.validate = validate;
     this.keys = keys;
     if (exact === false) this.exact = false;
     if (reassign === false) this.reassign = reassign;
@@ -28,10 +30,10 @@ class Collector {
     if (typeof timeout === 'number' && timeout > 0) {
       this.#timeout = AbortSignal.timeout(timeout);
       this.#signal = AbortSignal.any([this.#signal, this.#timeout]);
-      this.#timeout.addEventListener('abort', () => {
+      this.#signal.addEventListener('abort', () => {
         if (Object.keys(this.defaults).length > 0) this.#default();
         if (this.done) return;
-        this.fail(this.#timeout.reason);
+        this.fail(this.#signal.reason);
       });
     }
   }
@@ -109,16 +111,25 @@ class Collector {
       this.#fulfill = resolve;
       this.#reject = reject;
       if (!this.done) return;
+      if (this.validate) {
+        try {
+          this.validate(this.data);
+        } catch (err) {
+          this.#cause = err;
+        }
+      }
       if (this.#cause) reject(this.#cause);
       else resolve(this.data);
     }).then(onFulfilled, onRejected);
   }
 }
 
+const collect = (keys, options) => new Collector(keys, options);
+
 // Usage
 
-(async () => {
-  const ac = new Collector(['fileName', 'userName']);
+const main = async () => {
+  const ac = collect(['fileName', 'userName']);
 
   setTimeout(() => {
     ac.set('fileName', 'marcus.txt');
@@ -130,4 +141,6 @@ class Collector {
 
   const result = await ac;
   console.log(result);
-})();
+};
+
+main();
