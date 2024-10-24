@@ -5,7 +5,7 @@ class KeyCollector {
   #data = {};
   #keys = [];
   #count = 0;
-  #resolve = null;
+  #done = null;
 
   constructor(keys) {
     this.#keys = keys;
@@ -19,12 +19,12 @@ class KeyCollector {
     this.#data[key] = value;
     if (this.#count === this.#keys.length) {
       this.#finished = true;
-      if (this.#resolve) this.#resolve(this.#data);
+      if (this.#done) this.#done(this.#data);
     }
   }
 
   then(resolve) {
-    this.#resolve = resolve;
+    this.#done = resolve;
   }
 }
 
