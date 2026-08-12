@@ -14,7 +14,7 @@ const keyCollector = (keys) => {
       data[key] = value;
       if (count === keys.length) {
         finished = true;
-        if (done) done(data);
+        done?.(data);
       }
     }
   };
